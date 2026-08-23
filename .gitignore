@@ -1,0 +1,41 @@
+# --- Data & large artifacts (see GITHUB_SETUP.md) ---
+data/
+datasets/
+*.parquet
+*.csv.gz
+
+# Uncomment these if you decide to keep model artifacts OUT of git too
+# models/
+# *.pkl
+# *.pt
+# *.joblib
+# *.ubj
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.python-version
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# --- Secrets / config ---
+.env
+*.env.local
+config_local.py
+secrets.json
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Colab ---
+sample_data/
