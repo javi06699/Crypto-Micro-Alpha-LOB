@@ -68,43 +68,35 @@ aleatoria para verificar si la estrategia supera al azar.
 │   ├── final_xgb_model.pkl
 │   └── best_val_model_pytorch.pt
 └── data/
-    └── (Parquet crudos/intermedios — ver "Sobre los datos" abajo)
+├── binance-futures_book_snapshot_25_2026-04-01_BTCUSDT.parquet
+└── (Parquet crudos/intermedios — ver "Sobre los datos" abajo)
 ```
 
-No es obligatorio usar exactamente esta estructura, pero es la que se
-referencia en este README y mantiene notebooks, modelos y datos
-separados de forma ordenada, lo que además simplifica las reglas de
-`.gitignore` y Git LFS.
+No es obligatorio usar exactamente esta estructura, pero es la que se referencia en este README y mantiene notebooks, modelos y datos separados de forma ordenada, lo que además simplifica las reglas de `.gitignore` y Git LFS.
 
-## Sobre los datos (importante antes de subir el repo)
+## Sobre los datos y artefactos (importante antes de subir el repo)
 
-Los archivos de datos de este proyecto son grandes, y GitHub tiene
-límites estrictos que hay que tener en cuenta:
+Los archivos de datos y algunos modelos de este proyecto son grandes, por lo que debes tener en cuenta los límites estrictos de GitHub (100 MB por archivo):
 
-| Archivo | Tamaño | Límite de 100 MB de GitHub |
+| Archivo / Artefacto | Tamaño aproximado | Estado respecto al límite de 100 MB de GitHub |
 |---|---|---|
-| `dataset_completo.parquet` | ~179 MB | ❌ lo supera — **obligatorio** usar Git LFS o excluirlo |
-| `dataset_final.parquet` | ~73 MB | ⚠️ dentro del límite, pero por encima del umbral de aviso de 50 MB |
-| `df_book_10.parquet` | ~39 MB | ✅ correcto, aunque sigue siendo grande |
-| `final_xgb_model.pkl` | ~21 MB | ✅ correcto |
-| `best_val_model_pytorch.pt` | ~0.6 MB | ✅ correcto |
+| `dataset_completo.parquet` | ~179 MB | ❌ **Supera el límite** — obligatorio usar Git LFS o excluirlo |
+| `binance-futures_book_snapshot_25_2026-04-01_BTCUSDT.parquet` | ~94.5 MB | ⚠️ **Cerca del límite** (alerta a los 50 MB) — recomendado Git LFS |
+| `dataset_final.parquet` | ~73 MB | ⚠️ Dentro del límite, pero por encima del umbral de aviso de 50 MB |
+| `df_book_10.parquet` | ~39 MB | ✅ Correcto |
+| `final_xgb_model.pkl` | ~21 MB | ✅ Correcto |
+| `final_scaler_logreg.joblib` | < 1 MB | ✅ Correcto (escalador `StandardScaler` de Scikit-Learn) |
+| `best_val_model_pytorch.pt` | ~0.6 MB | ✅ Correcto |
 
-Dos archivos, `final_xgb_model.json` y `final_xgb_model.ubj`, llegaron
-con 0 bytes en la exportación que recibí — parece una exportación de
-modelo incompleta o fallida. Vuelve a exportarlos desde el notebook de
-entrenamiento antes de subirlos, o elimínalos del repositorio si
-`final_xgb_model.pkl` es tu archivo de modelo canónico.
+## Instalación
 
-**Enfoque recomendado:** no subas los datasets Parquet crudos/intermedios
-a Git. Es mejor regenerarlos ejecutando los notebooks del pipeline, o
-alojarlos externamente (por ejemplo, como "release asset" de GitHub,
-Google Drive, Kaggle Datasets o S3) y enlazarlos desde este README. Git
-(incluso con LFS) no es la mejor herramienta para archivos de datos
-grandes que se regeneran con frecuencia. Mantén bajo control de
-versiones solo los artefactos de los modelos entrenados (y quizás un
-dataset de muestra pequeño para demos), usando Git LFS para cualquier
-archivo mayor a ~10 MB. Consulta `GITHUB_SETUP.md` para los comandos
-exactos.
+```bash
+git clone [https://github.com/](https://github.com/)<tu-usuario>/<tu-repo>.git
+cd <tu-repo>
+python -m venv .venv
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+
 
 ## Instalación
 

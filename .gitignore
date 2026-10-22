@@ -1,8 +1,8 @@
 # --- Data & large artifacts (see GITHUB_SETUP.md) ---
-data/
-datasets/
-*.parquet
-*.csv.gz
+#data/
+#datasets/
+#*.parquet
+#*.csv.gz
 
 # Uncomment these if you decide to keep model artifacts OUT of git too
 # models/

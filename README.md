@@ -65,50 +65,34 @@ control to check whether the strategy beats chance.
 │   ├── final_xgb_model.pkl
 │   └── best_val_model_pytorch.pt
 └── data/
-    └── (raw/intermediate Parquet files — see "About the data" below)
+├── binance-futures_book_snapshot_25_2026-04-01_BTCUSDT.parquet
+└── (Raw/intermediate Parquet files — see "About the Data" below)
 ```
 
-You don't have to use this exact layout, but it's the one referenced
-throughout this README and it keeps notebooks, models, and data cleanly
-separated — which also makes `.gitignore` and Git LFS rules simpler.
+Using this exact layout is not mandatory, but it matches the paths referenced across this README and keeps notebooks, models, and data neatly separated (which also simplifies `.gitignore` and Git LFS rules).
 
-## About the data (important before you push)
+## About the Data & Artifacts (Important before pushing to Git)
 
-This project's data files are large, and GitHub has hard limits you need
-to plan around:
+Data files and model artifacts in this project can be large. Keep GitHub's strict 100 MB per-file limit in mind:
 
-| File | Size | GitHub 100 MB limit |
+| File / Artifact | Approx. Size | Status vs. GitHub 100 MB Limit |
 |---|---|---|
-| `dataset_completo.parquet` | ~179 MB | ❌ exceeds it — **must** use Git LFS or be excluded |
-| `dataset_final.parquet` | ~73 MB | ⚠️ under the limit but above GitHub's 50 MB warning threshold |
-| `df_book_10.parquet` | ~39 MB | ✅ ok, but still sizable |
-| `final_xgb_model.pkl` | ~21 MB | ✅ ok |
-| `best_val_model_pytorch.pt` | ~0.6 MB | ✅ ok |
+| `dataset_completo.parquet` | ~179 MB | ❌ **Exceeds limit** — must use Git LFS or exclude |
+| `binance-futures_book_snapshot_25_2026-04-01_BTCUSDT.parquet` | ~94.5 MB | ⚠️ **Near limit** (warning at 50 MB) — Git LFS recommended |
+| `dataset_final.parquet` | ~73 MB | ⚠️ Within limit, but triggers GitHub's 50 MB soft warning |
+| `df_book_10.parquet` | ~39 MB | ✅ Safe |
+| `final_xgb_model.pkl` | ~21 MB | ✅ Safe |
+| `final_scaler_logreg.joblib` | < 1 MB | ✅ Safe (Scikit-Learn `StandardScaler`) |
+| `best_val_model_pytorch.pt` | ~0.6 MB | ✅ Safe |
 
-Two files, `final_xgb_model.json` and `final_xgb_model.ubj`, were 0 bytes
-in the export I received — they look like an incomplete/failed model
-export. Re-export them from the training notebook before committing, or
-drop them from the repo if `final_xgb_model.pkl` is your canonical model
-file.
-
-**Recommended approach:** don't commit raw/intermediate Parquet datasets
-to Git at all — regenerate them by running the pipeline notebooks, or
-host them externally (e.g., a release asset, Google Drive, Kaggle
-Datasets, or S3) and link to them from this README. Git (even with LFS)
-is not a great fit for large, frequently-regenerated data files. Keep
-only the trained model artifacts (and maybe a small sample dataset for
-demos) under version control, using Git LFS for anything over ~10 MB.
-See `GITHUB_SETUP.md` for exact commands.
-
-## Setup
+## Installation
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
+git clone [https://github.com/](https://github.com/)<your-username>/<your-repo>.git
 cd <your-repo>
 python -m venv .venv
 source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-```
 
 You'll also need a [Tardis.dev](https://tardis.dev/) API key to re-download
 raw order book data (free tier covers a limited date range); set it as
